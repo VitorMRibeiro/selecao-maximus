@@ -10,7 +10,7 @@ const connection = mysql.createConnection({
 // criar as tabelas
 
 // tabela de cliente
-connection.query('CREATE TABLE IF NOT EXISTS cliente ( clienteID int AUTO_INCREMENT, nome varchar(200), dataNascimento date, saldoDevedor varchar(20), PRIMARY KEY (clienteID))', 
+connection.query("CREATE TABLE IF NOT EXISTS cliente ( clienteID int AUTO_INCREMENT, nome varchar(200), dataNascimento date, saldoDevedor varchar(20) DEFAULT '0', PRIMARY KEY (clienteID))", 
     (err, results, fields) => { if (err) throw err });
 
 // tabela de vendas
