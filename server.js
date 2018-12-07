@@ -20,10 +20,10 @@ server.post('/clientes', (req, res) => {
     req.setEncoding('utf-8');
     // processar o corpo do request.
     req.on('data', (chunk) => {
-        let clienteInfo;
-        if(!(clienteInfo = validarJSON(chunk, res))) return;
+        let clienteInfo = validarJSON(chunk, res);
+        if(clienteInfo === null) return;
 
-        retornarErro(clienteID.nome, res, "atributo 'nome' está faltando");
+        retornarErro(clienteInfo.nome, res, "atributo 'nome' está faltando");
         retornarErro(formatoData.test(clienteInfo.dataNascimento), res, 'dataNascimento - formato inválido, tente YYYY-MM-DD');
         retornarErro(formatoSaldo.test(clienteInfo.saldoDevedor), res, "saldoDevedor - formato inválido, exemplo de saldo válido: 'R$ 200'");
         
@@ -40,9 +40,9 @@ server.post('/clientes', (req, res) => {
 server.put(/\/clientes\/[0-9]+/, (req, res) => {
     const clienteID = getClienteID(req.url);
 
-    let clienteInfo;
     req.on('data', (chunk) => {
-        if(!(clienteInfo = validarJSON(chunk, res))) return;
+        let clienteInfo = validarJSON(chunk, res);
+        if(clienteInfo === null) return;
 
         retornarErro(clienteInfo.dataNascimento != undefined && formatoData.test(clienteInfo.dataNascimento), res, 'dataNascimento - formato inválido, tente YYYY-MM-DD');
         retornarErro(clienteInfo.saldoDevedor != undefined && formatoSaldo.test(clienteInfo.saldoDevedor), res, "saldoDevedor - formato inválido, exemplo de saldo válido: 'R$ 200'");
@@ -75,8 +75,8 @@ server.post(/\/vendas\/[0-9]+/, (req, res) => {
     const clienteID = getClienteID(req.url);
     
     req.on('data', (chunk) => {
-        let clienteInfo;
-        if(!(clienteInfo = validarJSON(chunk))) return;
+        let clienteInfo = validarJSON(chunk, res);
+        if(clienteInfo === null) return;
 
         retornarErro(formatoSaldo.test(clienteInfo.valor), res, "valor - formato inválido, exemplo de saldo válido: 'R$ 200'");
         retornarErro(formatoData.test(clienteInfo.dataRealizacao), res, 'dataRealizacao - formato inválido, tente YYYY-MM-DD');
