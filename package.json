@@ -3,7 +3,9 @@
     "type": "git",
     "url": "https://github.com/VitorMRibeiro/selecao-maximus.git"
   },
+  "main": "server.js",
   "dependencies": {
+    "express": "^4.16.4",
     "mysql": "github:mysqljs/mysql"
   }
 }

@@ -7,7 +7,6 @@ const connection = mysql.createConnection({
     database : 'test'
 })
 
-
 // criar as tabelas
 
 // tabela de cliente
