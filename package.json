@@ -1,0 +1,9 @@
+{
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/VitorMRibeiro/selecao-maximus.git"
+  },
+  "dependencies": {
+    "mysql": "github:mysqljs/mysql"
+  }
+}
