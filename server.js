@@ -23,11 +23,11 @@ server.post('/clientes', (req, res) => {
         let clienteInfo = validarJSON(chunk, res);
         if(clienteInfo === null) return;
 
-        retornarErro(clienteInfo.nome, res, "atributo 'nome' está faltando");
-        retornarErro(formatoData.test(clienteInfo.dataNascimento), res, 'dataNascimento - formato inválido, tente YYYY-MM-DD');
-        retornarErro(formatoSaldo.test(clienteInfo.saldoDevedor), res, "saldoDevedor - formato inválido, exemplo de saldo válido: 'R$ 200'");
+        retornarErro(clienteInfo.nome === undefined, res, "atributo 'nome' está faltando");
+        retornarErro(!formatoData.test(clienteInfo.dataNascimento), res, 'dataNascimento - formato inválido, tente YYYY-MM-DD');
+        retornarErro(!formatoSaldo.test(clienteInfo.saldoDevedor), res, "saldoDevedor - formato inválido, exemplo de saldo válido: 'R$ 200'");
         
-        BD.criarCliente(clienteInfo.nome, clienteInfo.dataNascimento, clienteInfo.saldo);
+        BD.criarCliente(clienteInfo.nome, clienteInfo.dataNascimento, clienteInfo.saldoDevedor);
     });
 
     req.on('end', () => {
@@ -44,8 +44,8 @@ server.put(/\/clientes\/[0-9]+/, (req, res) => {
         let clienteInfo = validarJSON(chunk, res);
         if(clienteInfo === null) return;
 
-        retornarErro(clienteInfo.dataNascimento != undefined && formatoData.test(clienteInfo.dataNascimento), res, 'dataNascimento - formato inválido, tente YYYY-MM-DD');
-        retornarErro(clienteInfo.saldoDevedor != undefined && formatoSaldo.test(clienteInfo.saldoDevedor), res, "saldoDevedor - formato inválido, exemplo de saldo válido: 'R$ 200'");
+        retornarErro(!(clienteInfo.dataNascimento != undefined && formatoData.test(clienteInfo.dataNascimento)), res, 'dataNascimento - formato inválido, tente YYYY-MM-DD');
+        retornarErro(!(clienteInfo.saldoDevedor != undefined && formatoSaldo.test(clienteInfo.saldoDevedor)), res, "saldoDevedor - formato inválido, exemplo de saldo válido: 'R$ 200'");
 
         BD.atualizarCliente(clienteID, clienteInfo.nome, clienteInfo.dataNascimento, clienteInfo.saldoDevedor);
     });
@@ -78,9 +78,9 @@ server.post(/\/vendas\/[0-9]+/, (req, res) => {
         let vendaInfo = validarJSON(chunk, res);
         if(vendaInfo === null) return;
 
-        retornarErro(formatoSaldo.test(vendaInfo.valor), res, "valor - formato inválido, exemplo de saldo válido: 'R$ 200'");
-        retornarErro(formatoData.test(vendaInfo.dataRealizacao), res, 'dataRealizacao - formato inválido, tente YYYY-MM-DD');
-        retornarErro(formatoSaldo.test(vendaInfo.saldo), res, "valor - formato inválido, exemplo de saldo válido: 'R$ 200'");
+        retornarErro(!(formatoSaldo.test(vendaInfo.valor)), res, "valor - formato inválido, exemplo de saldo válido: 'R$ 200'");
+        retornarErro(!(formatoData.test(vendaInfo.dataRealizacao)), res, 'dataRealizacao - formato inválido, tente YYYY-MM-DD');
+        retornarErro(!(formatoSaldo.test(vendaInfo.saldo)), res, "valor - formato inválido, exemplo de saldo válido: 'R$ 200'");
         
         BD.criarVenda(clienteID, vendaInfo.valor, vendaInfo.dataRealizacao, vendaInfo.saldo);    
         // TODO atualizar o saldo do cliente.
