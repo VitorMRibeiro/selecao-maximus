@@ -38,7 +38,7 @@ function atualizarCliente( clienteID, nome, dataNascimento, saldoDevedor){
     const setNome = nome ? ('nome = ' + "'" + nome + "'") : '';
     const setDataNascimento = dataNascimento ? ( (nome ? ', ' : ' ') + 'dataNascimento = ' + "'" + dataNascimento + "'") : ' ';
     const setSaldoDevedor = saldoDevedor ? (((dataNascimento || nome) ? ', ' : ' ') + 'saldoDevedor = ' + "'" + saldoDevedor + "' ") : '';
-    const queryString = 'UPDATE cliente SET ' + setNome + setDataNascimento + setSaldoDevedor + 'WHERE clientID = ' + clienteID;
+    const queryString = 'UPDATE cliente SET ' + setNome + setDataNascimento + setSaldoDevedor + 'WHERE clienteID = ' + clienteID;
 
     connection.query(queryString, (err) => {if(err) throw err} );
 }

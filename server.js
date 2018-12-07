@@ -44,8 +44,8 @@ server.put(/\/clientes\/[0-9]+/, (req, res) => {
         let clienteInfo = validarJSON(chunk, res);
         if(clienteInfo === null) return;
 
-        retornarErro(!(clienteInfo.dataNascimento != undefined && formatoData.test(clienteInfo.dataNascimento)), res, 'dataNascimento - formato inválido, tente YYYY-MM-DD');
-        retornarErro(!(clienteInfo.saldoDevedor != undefined && formatoSaldo.test(clienteInfo.saldoDevedor)), res, "saldoDevedor - formato inválido, exemplo de saldo válido: 'R$ 200'");
+        retornarErro(!(clienteInfo.dataNascimento === undefined || formatoData.test(clienteInfo.dataNascimento)), res, 'dataNascimento - formato inválido, tente YYYY-MM-DD');
+        retornarErro(!(clienteInfo.saldoDevedor === undefined || formatoSaldo.test(clienteInfo.saldoDevedor)), res, "saldoDevedor - formato inválido, exemplo de saldo válido: 'R$ 200'");
 
         BD.atualizarCliente(clienteID, clienteInfo.nome, clienteInfo.dataNascimento, clienteInfo.saldoDevedor);
     });
@@ -60,6 +60,7 @@ server.put(/\/clientes\/[0-9]+/, (req, res) => {
 server.delete(/\/clientes\/[0-9]+/, (req, res) => {
     const clienteID = getClienteID(req.url);
     BD.deletarCliente(clienteID);
+    res.end();
 });
 
 // retornar vendas realizadas pelo cliente
@@ -107,8 +108,7 @@ function validarJSON(chunk, res){
         jsonValido = JSON.parse(chunk);
     } catch (error) {
         res.status(400);            
-        res.write('JSON inválido');
-        res.end();
+        res.end('JSON inválido');
         return null;            
     }
     return jsonValido;
@@ -117,8 +117,7 @@ function validarJSON(chunk, res){
 function retornarErro(guard, res, mensagemErro){
     if(guard){
         res.status(400);
-        res.write(mensagemErro);
-        res.end();
+        res.end(mensagemErro);
     }
 }
 
