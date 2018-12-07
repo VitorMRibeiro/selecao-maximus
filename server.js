@@ -104,7 +104,7 @@ function validarJSON(chunk, res){
     res.setHeader('content-type', 'text/plain');
     let jsonValido;
     try {
-        clienteInfo = JSON.parse(chunk);
+        jsonValido = JSON.parse(chunk);
     } catch (error) {
         res.status(400);            
         res.write('JSON inválido');
