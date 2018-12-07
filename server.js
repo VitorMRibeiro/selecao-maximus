@@ -75,14 +75,14 @@ server.post(/\/vendas\/[0-9]+/, (req, res) => {
     const clienteID = getClienteID(req.url);
     
     req.on('data', (chunk) => {
-        let clienteInfo = validarJSON(chunk, res);
-        if(clienteInfo === null) return;
+        let vendaInfo = validarJSON(chunk, res);
+        if(vendaInfo === null) return;
 
-        retornarErro(formatoSaldo.test(clienteInfo.valor), res, "valor - formato inválido, exemplo de saldo válido: 'R$ 200'");
-        retornarErro(formatoData.test(clienteInfo.dataRealizacao), res, 'dataRealizacao - formato inválido, tente YYYY-MM-DD');
-        retornarErro(formatoSaldo.test(clienteInfo.saldo), res, "valor - formato inválido, exemplo de saldo válido: 'R$ 200'");
+        retornarErro(formatoSaldo.test(vendaInfo.valor), res, "valor - formato inválido, exemplo de saldo válido: 'R$ 200'");
+        retornarErro(formatoData.test(vendaInfo.dataRealizacao), res, 'dataRealizacao - formato inválido, tente YYYY-MM-DD');
+        retornarErro(formatoSaldo.test(vendaInfo.saldo), res, "valor - formato inválido, exemplo de saldo válido: 'R$ 200'");
         
-        BD.criarVenda(clienteID, clienteInfo.valor, clienteInfo.dataRealizacao, clienteInfo.saldo);    
+        BD.criarVenda(clienteID, vendaInfo.valor, vendaInfo.dataRealizacao, vendaInfo.saldo);    
         // TODO atualizar o saldo do cliente.
     })
 
