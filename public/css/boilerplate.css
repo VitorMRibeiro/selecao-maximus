@@ -1,0 +1,353 @@
+/*! Primitive
+ * A front end Sass boilerplate
+ *
+ * Author: Tania Rascia 
+ */
+/* Variables
+ * ===============
+ *
+ * All variables and most of the configuration is defined on this page. */
+/* Containers */
+/* Breakpoints */
+/* Colors */
+/* Typography */
+/* Padding */
+/* Borders */
+/* Buttons */
+/* Forms */
+/* Tables */
+/* Code */
+/* Mixins
+  =============== */
+/*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
+/**
+ * 1. Set default font family to sans-serif.
+ * 2. Prevent iOS and IE text size adjust after device orientation change,
+ *    without disabling user zoom.
+ */
+ html {
+    -ms-text-size-adjust: 100%;
+    /* 2 */
+    -webkit-text-size-adjust: 100%;
+    /* 2 */ }
+  
+  /**
+   * Remove default margin.
+   */
+  body {
+    margin: 0; }
+  
+  /* HTML5 display definitions
+     ========================================================================== */
+  /**
+   * Correct `block` display not defined for any HTML5 element in IE 8/9.
+   * Correct `block` display not defined for `details` or `summary` in IE 10/11
+   * and Firefox.
+   * Correct `block` display not defined for `main` in IE 11.
+   */
+  article,
+  aside,
+  details,
+  figcaption,
+  figure,
+  footer,
+  header,
+  main,
+  menu,
+  nav,
+  section,
+  summary {
+    display: block; }
+  
+  /**
+   * 1. Correct `inline-block` display not defined in IE 8/9.
+   * 2. Normalize vertical alignment of `progress` in Chrome, Firefox, and Opera.
+   */
+  audio,
+  canvas,
+  progress,
+  video {
+    display: inline-block;
+    /* 1 */
+    vertical-align: baseline;
+    /* 2 */ }
+  
+  /**
+   * Prevent modern browsers from displaying `audio` without controls.
+   * Remove excess height in iOS 5 devices.
+   */
+  audio:not([controls]) {
+    display: none;
+    height: 0; }
+  
+  /**
+   * Address `[hidden]` styling not present in IE 8/9/10.
+   * Hide the `template` element in IE 8/9/10/11, Safari, and Firefox < 22.
+   */
+  [hidden],
+  template {
+    display: none; }
+  
+  /**
+   * Improve readability of focused elements when they are also in an
+   * active/hover state.
+   */
+  a:active,
+  a:hover {
+    outline: 0; }
+  
+  /**
+   * Address style set to `bolder` in Firefox 4+, Safari, and Chrome.
+   */
+  b,
+  strong {
+    font-weight: bold; }
+  
+  /**
+   * Prevent `sub` and `sup` affecting `line-height` in all browsers.
+   */
+  sub,
+  sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline; }
+  
+  sup {
+    top: -0.5em; }
+  
+  sub {
+    bottom: -0.25em; }
+  
+  /* Embedded content
+     ========================================================================== */
+  /**
+   * Remove border when inside `a` element in IE 8/9/10.
+   */
+  img {
+    border: 0; }
+  
+  /**
+   * Correct overflow not hidden in IE 9/10/11.
+   */
+  svg:not(:root) {
+    overflow: hidden; }
+  
+  /**
+   * Address differences between Firefox and other browsers.
+   */
+  hr {
+    box-sizing: content-box;
+    height: 0; }
+  
+  /**
+   * Contain overflow in all browsers.
+   */
+  pre {
+    overflow: auto; }
+  
+  /**
+   * Re-set default cursor for disabled elements.
+   */
+  button[disabled],
+  html input[disabled] {
+    cursor: default; }
+  
+  /**
+   * Remove inner padding and border in Firefox 4+.
+   */
+  button::-moz-focus-inner,
+  input::-moz-focus-inner {
+    border: 0;
+    padding: 0; }
+  
+  /* Reset
+    =============== */
+  html {
+    box-sizing: border-box; }
+  
+  *,
+  *::before,
+  *::after {
+    box-sizing: inherit; }
+  
+  figure {
+    margin: 0; }
+  
+  /* Scaffolding
+    =============== */
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font: normal normal normal 1rem/1.6 -apple-system, BlinkMacSystemFont, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 1rem; }
+  
+  body {
+    color: #404040;
+    background: white;
+    font-size: 1rem; }
+  
+  p,
+  ol,
+  ul,
+  dl,
+  table {
+    margin: 0 0 1.5rem 0; }
+  
+  ul li ul {
+    margin-bottom: 0; }
+  
+  ol li ol {
+    margin-bottom: 0; }
+  
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    margin: 1.5rem 0;
+    font-weight: 600;
+    font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, Helvetica, Arial, sans-serif;
+    line-height: 1.2;
+    color: #404040; }
+    h1:not(:first-child),
+    h2:not(:first-child),
+    h3:not(:first-child),
+    h4:not(:first-child),
+    h5:not(:first-child) {
+      margin: 1.5rem 0; }
+  
+  h1:not(:first-child),
+  h2:not(:first-child),
+  h3:not(:first-child) {
+    margin-top: 2rem; }
+  
+  h1 {
+    font-size: 1.75rem; }
+  
+  h2 {
+    font-size: 1.5rem; }
+  
+  h3 {
+    font-size: 1.25rem; }
+  
+  h4 {
+    font-size: 1.1rem; }
+  
+  h5 {
+    font-size: 1rem; }
+  
+  @media (min-width: 600px) {
+    h1:not(:first-child),
+    h2:not(:first-child),
+    h3:not(:first-child) {
+      margin-top: 2.5rem; }
+    h1 {
+      font-size: 2.25rem; }
+    h2 {
+      font-size: 2rem; }
+    h3 {
+      font-size: 1.75rem; }
+    h4 {
+      font-size: 1.5rem; }
+    h5 {
+      font-size: 1.25rem; } }
+  
+  a {
+    color: #0366EE;
+    text-decoration: none; }
+    a:hover, a:active, a:focus {
+      color: #0246a2;
+      text-decoration: underline; }
+  
+  /* Buttons
+    =============== */
+  .button, a.button, button, [type=submit], [type=reset], [type=button] {
+    -webkit-appearance: none;
+    display: inline-block;
+    border: 1px solid #0366EE;
+    border-radius: 4px;
+    background: #0366EE;
+    color: #ffffff;
+    font-weight: 600;
+    font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 1rem;
+    text-transform: none;
+    padding: .75rem 1.25rem;
+    margin: 0 0 .5rem 0;
+    vertical-align: middle;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    line-height: 1; }
+  
+  .button:hover, a.button:hover, button:hover, [type=submit]:hover, [type=reset]:hover, [type=button]:hover {
+    border: 1px solid #0250bc;
+    background: #0250bc;
+    color: #ffffff;
+    text-decoration: none; }
+  
+  .button:focus, .button:active, a.button:focus, a.button:active, button:focus, button:active, [type=submit]:focus, [type=submit]:active, [type=reset]:focus, [type=reset]:active, [type=button]:focus, [type=button]:active {
+    border: 1px solid #0250bc;
+    background: #0250bc;
+    color: #ffffff;
+    text-decoration: none; }
+  
+  .muted-button,
+  a.muted-button {
+    background: transparent;
+    border: 1px solid #cdcdcd;
+    color: #4e4e4e; }
+    .muted-button:hover, .muted-button:focus, .muted-button:active,
+    a.muted-button:hover,
+    a.muted-button:focus,
+    a.muted-button:active {
+      color: #4e4e4e;
+      border: 1px solid #818181;
+      background: transparent; }
+  
+  /* Forms
+    =============== */
+  [type=color], [type=date], [type=datetime], [type=datetime-local], [type=email], [type=month], [type=number], [type=password], [type=search], [type=tel], [type=text], [type=url], [type=week], [type=time], select, textarea {
+    display: block;
+    border: 1px solid #cdcdcd;
+    border-radius: 4px;
+    padding: .75rem;
+    outline: none;
+    background: transparent;
+    margin-bottom: .5rem;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 100%;
+    line-height: 1; }
+  
+  label {
+    font-weight: 600;
+    max-width: 100%;
+    display: block;
+    margin: 1rem 0 .5rem; }
+  
+  @media (min-width: 600px) {
+    .split-form label {
+      text-align: right;
+      padding: 0 .5rem;
+      margin-bottom: 1rem; } }
+  
+  input.has-error, input.has-error:hover, input.has-error:focus, input.has-error:active,
+  select.has-error,
+  select.has-error:hover,
+  select.has-error:focus,
+  select.has-error:active,
+  textarea.has-error,
+  textarea.has-error:hover,
+  textarea.has-error:focus,
+  textarea.has-error:active {
+    border: 1px solid #D33C40;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1), 0 0 6px #f4cecf; }
+  
+  ::-webkit-input-placeholder,
+  ::-moz-placeholder,
+  :-moz-placeholder,
+  :-ms-input-placeholder {
+    color: #9a9a9a; }
+  

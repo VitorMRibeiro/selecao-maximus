@@ -1,2 +1,5 @@
 node_modules
 package-lock.json
+
+# diretorio de saida do webpack com os arquivos javascript compilados e minificados.
+public/js
