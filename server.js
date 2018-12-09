@@ -1,4 +1,5 @@
 const http = require('http');
+const fs = require('fs');
 const express = require('express');
 const BD = require('./interfaceBD');
 
@@ -6,6 +7,15 @@ const formatoSaldo = /^(R\$|US\$|\$|€|¥|£)\s?-?[0-9]+(,[0-9]+)?$/;
 const formatoData = /^[0-9]{4}-(0[0-9]|1[0-2])-([0-2][0-9]|3[0-1])$/;
 
 const server = express();
+
+server.get('', (req, res) => {
+    fs.readFile('./public/index.html', (err, data) => {
+        if(err) throw err;
+        
+        res.writeHead(200, {'content-type': 'text/html'});
+        res.end(data);
+    })
+});
 
 // retornar todos os clientes
 server.get('/clientes', (req, res) => {
@@ -74,14 +84,14 @@ server.get(/\/vendas\/[0-9]+/, (req, res) => {
 // criar venda e especificar o cliente
 server.post(/\/vendas\/[0-9]+/, (req, res) => {
     const clienteID = getClienteID(req.url);
-    
+
     req.on('data', (chunk) => {
         let vendaInfo = validarJSON(chunk, res);
         if(vendaInfo === null) return;
 
-        retornarErro(!(formatoSaldo.test(vendaInfo.valor)), res, "valor - formato inválido, exemplo de saldo válido: 'R$ 200'");
-        retornarErro(!(formatoData.test(vendaInfo.dataRealizacao)), res, 'dataRealizacao - formato inválido, tente YYYY-MM-DD');
-        retornarErro(!(formatoSaldo.test(vendaInfo.saldo)), res, "valor - formato inválido, exemplo de saldo válido: 'R$ 200'");
+        if(retornarErro(!(formatoSaldo.test(vendaInfo.valor)), res, "valor - formato inválido, exemplo de saldo válido: 'R$ 200'")) return;
+        if(retornarErro(!(formatoData.test(vendaInfo.dataRealizacao)), res, 'dataRealizacao - formato inválido, tente YYYY-MM-DD')) return;
+        if(retornarErro(!(formatoSaldo.test(vendaInfo.saldo)), res, "valor - formato inválido, exemplo de saldo válido: 'R$ 200'")) return;
         
         BD.criarVenda(clienteID, vendaInfo.valor, vendaInfo.dataRealizacao, vendaInfo.saldo);    
         // TODO atualizar o saldo do cliente.
@@ -91,6 +101,30 @@ server.post(/\/vendas\/[0-9]+/, (req, res) => {
         res.status(200);
         res.end();
     })
+});
+
+server.get(/.*\.(css|js)$/, (req, res) => {
+    let extensao = req.url.split('.').pop();
+
+    switch (extensao) {
+        case 'css':
+            res.writeHead(200, {'content-type':'text/css'});
+            break;
+        case 'js':
+            res.writeHead(200, {'content-type': 'application/js'});
+            break;
+        default:
+            res.writeHead(200, {'content-type': 'text/plain'});
+            break;
+    }
+
+    fs.readFile('.' + req.url, (err, data) => {
+        if(err !== null){
+            res.status(404);
+            res.end();
+        }
+        res.end(data);
+    });  
 });
 
 server.listen(80, '127.0.0.1', () => {
@@ -107,7 +141,7 @@ function validarJSON(chunk, res){
     try {
         jsonValido = JSON.parse(chunk);
     } catch (error) {
-        res.status(400);            
+        res.status(200);            
         res.end('JSON inválido');
         return null;            
     }
@@ -116,8 +150,10 @@ function validarJSON(chunk, res){
 
 function retornarErro(guard, res, mensagemErro){
     if(guard){
-        res.status(400);
+        res.status(200);
         res.end(mensagemErro);
+        return true;
     }
+    return false;
 }
 

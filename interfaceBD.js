@@ -48,7 +48,7 @@ function deletarCliente(clienteID){
 }
 
 function retornarVendas(clienteID, writebleStream, callback){
-    connection.query(`SELECT cliente.clienteID, valor, dataRealizacao, saldo FROM cliente JOIN venda ON cliente.clienteID = venda.clienteID WHERE cliente.clienteID = ${clienteID} ORDER BY dataRealizacao`, (err, results) => {
+    connection.query(`SELECT cliente.clienteID, valor, dataRealizacao, saldo FROM cliente JOIN venda ON cliente.clienteID = venda.clienteID WHERE cliente.clienteID = ${clienteID} ORDER BY dataRealizacao DESC`, (err, results) => {
         writebleStream.write(JSON.stringify(results));
         callback();
     });
