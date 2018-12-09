@@ -19,6 +19,7 @@ server.get('', (req, res) => {
 
 // retornar todos os clientes
 server.get('/clientes', (req, res) => {
+    res.writeHead(200, {'content-type': 'application/json'})
     res.write('{ "clientes":');
     BD.retornarClientes(res, () => {
         res.end('}');
@@ -28,21 +29,17 @@ server.get('/clientes', (req, res) => {
 // criar um cliente
 server.post('/clientes', (req, res) => {
     req.setEncoding('utf-8');
+    res.writeHead(200, {'conent-type': 'application/json'});
     // processar o corpo do request.
     req.on('data', (chunk) => {
         let clienteInfo = validarJSON(chunk, res);
         if(clienteInfo === null) return;
 
-        retornarErro(clienteInfo.nome === undefined, res, "atributo 'nome' está faltando");
-        retornarErro(!formatoData.test(clienteInfo.dataNascimento), res, 'dataNascimento - formato inválido, tente YYYY-MM-DD');
-        retornarErro(!formatoSaldo.test(clienteInfo.saldoDevedor), res, "saldoDevedor - formato inválido, exemplo de saldo válido: 'R$ 200'");
+        if(retornarErro(clienteInfo.nome === undefined, res, "atributo 'nome' está faltando")) return;
+        if(retornarErro(!formatoData.test(clienteInfo.dataNascimento), res, 'dataNascimento - formato inválido, tente YYYY-MM-DD')) return;
+        if(retornarErro(!formatoSaldo.test(clienteInfo.saldoDevedor), res, "saldoDevedor - formato inválido, exemplo de saldo válido: 'R$ 200'")) return;
         
-        BD.criarCliente(clienteInfo.nome, clienteInfo.dataNascimento, clienteInfo.saldoDevedor);
-    });
-
-    req.on('end', () => {
-        res.status(200);
-        res.end();
+        BD.criarCliente(clienteInfo.nome, clienteInfo.dataNascimento, clienteInfo.saldoDevedor, res, () => res.end());
     });
 });
 
@@ -150,8 +147,8 @@ function validarJSON(chunk, res){
 
 function retornarErro(guard, res, mensagemErro){
     if(guard){
-        res.status(200);
-        res.end(mensagemErro);
+        res.writeHead(200, {'content-type': 'application/json'})
+        res.end(`{"erro": true, "mensagemErro": "${mensagemErro}"}`);
         return true;
     }
     return false;
