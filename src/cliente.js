@@ -21,9 +21,9 @@ class Cliente extends React.Component{
         const indice = vendas.findIndex((value) => {
             const newDate = new Date(dataRealizacao);
             const existingDate = new Date(value.dataRealizacao);
-            if( newDate > existingDate) return true;
+            if( newDate < existingDate) return true;
         })
-        vendas.splice(indice + 1, 0, {'valor':valor, 'dataRealizacao':dataRealizacao, 'saldo': saldo});
+        vendas.splice(indice, 0, {'valor':valor, 'dataRealizacao':dataRealizacao, 'saldo': saldo});
         this.setState({'vendas': vendas});
     }
 

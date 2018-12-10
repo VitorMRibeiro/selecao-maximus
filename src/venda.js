@@ -3,7 +3,12 @@ import ReactDOM from 'react-dom';
 
 class Venda extends React.Component{
     render(){
-        return <div className='row'><span className='row-valor'>{this.props.valor}</span><span className='row-data'>{this.props.dataRealizacao}</span></div>
+        return (
+            <div className='row'>
+                <span className='row-valor'>{this.props.valor}</span>
+                <span className='row-data'>{this.props.dataRealizacao.split('T')[0]}</span>
+            </div>
+        );
     }
 }
 
