@@ -1,0 +1,14 @@
+{
+    "nome": "Vitor",
+    "sobrenome": "Ribeiro",
+    "telefone": "(28) 98115-9725",
+    "gitHub": "https://github.com/VitorMRibeiro",
+    "linkedin": "https://www.linkedin.com/in/vitor-martins-58b455124/",
+    "endereco": {
+        "CEP": "29500-000",
+        "cidade": "Alegre - ES",
+        "bairro": "Guararema",
+        "Rua": "Pastor Abdias Ferreira Mattos",
+        "numero": "225"
+    }
+}
