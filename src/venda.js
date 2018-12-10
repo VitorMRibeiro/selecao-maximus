@@ -10,26 +10,29 @@ class Venda extends React.Component{
 class Formulario extends React.Component{
     constructor(props){
         super(props);
-        this.state = {};
-    }
-    confirmarVenda = () => {
-        
+        this.state = {'valor':'', 'data':'', 'saldo':''};
     }
 
     changeValor = (event) => { this.setState({'valor': event.target.value})}
     changeData = (event) => { this.setState({'data': event.target.value})}
     changeSaldo = (event) => { this.setState({'saldo': event.target.value})}    
 
+    confirmar = () => {
+        this.props.nova(this.state.valor, this.state.data, this.state.saldo);
+        this.props.closeModal();
+    }
+
     render(){
         return (
             <div className='vendas-formulario'>
                 <label>valor da venda</label>
-                <input onChange={this.changeValor} ></input>
+                <input name='valor' onChange={this.changeValor} ></input>
                 <label>data de realização</label>
-                <input onChange={this.changeData}></input>
+                <input name='data' onChange={this.changeData}></input>
                 <label>saldo</label>
-                <input onChange={this.changeSaldo} ></input>
-                <button onClick={() => this.props.nova(this.state.valor, this.state.data, this.state.saldo)}>Confirmar</button>
+                <input name='saldo' onChange={this.changeSaldo} ></input>
+                <button onClick={this.props.close}> Cancelar </button>
+                <button onClick={this.confirmar}> Confirmar </button>
             </div>
         );
     }
@@ -58,7 +61,7 @@ class Vendas extends React.Component{
                     </div>
                     { 
                         this.state.form ?
-                        <Formulario nova={this.props.nova} close={this.props.close} /> :
+                        <Formulario nova={this.props.nova} closeModal={this.props.close} close={() => this.setState({'form':false})} /> :
                         <button onClick={() => this.setState({'form': true})}>Nova venda</button>    
                     }
                     <button onClick={this.props.close} >Fechar</button>

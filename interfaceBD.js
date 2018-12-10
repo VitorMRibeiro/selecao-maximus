@@ -18,9 +18,13 @@ connection.query('CREATE TABLE IF NOT EXISTS  venda ( clienteID int, valor varch
     (err, results, fields) => { if (err) throw err });
 
 
-function criarCliente(nome, dataNascimento, saldoDevedor){
+function criarCliente(nome, dataNascimento, saldoDevedor, writebleStream, callback){
     connection.query(`INSERT INTO cliente (nome, dataNascimento, saldoDevedor) VALUES ('${nome}', '${dataNascimento}', '${saldoDevedor}')`, 
         (err, results, fields) => { if (err) throw err });
+    connection.query('SELECT LAST_INSERT_ID() as id', (err, results, fields) => {
+        writebleStream.write(JSON.stringify(results[0]));
+        callback();
+    });
 }
 
 function retornarClientes(writebleStream, callback){

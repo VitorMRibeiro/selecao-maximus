@@ -5,7 +5,7 @@ import {Vendas, Venda, Formulario} from './venda.js';
 class Cliente extends React.Component{
     constructor(props){
         super(props);
-        this.state = {'vendas':[], 'vendasOpen': false, 'init': false};
+        this.state = {'vendas':[], 'vendasOpen': false, 'init': false, 'saldo': props.saldo};
         this.http = new XMLHttpRequest();
     }
 
@@ -18,12 +18,12 @@ class Cliente extends React.Component{
     inserirVendaOrdem = (valor, dataRealizacao, saldo) => {
         let vendas = this.state.vendas;
         // colocar a venda em ordem de data
-        const indice = vandas.findIndex((value) => {
+        const indice = vendas.findIndex((value) => {
             const newDate = new Date(dataRealizacao);
             const existingDate = new Date(value.dataRealizacao);
             if( newDate > existingDate) return true;
         })
-        vendas.splice(indice, 0, {'valor':valor, 'dataRealizacao':dataRealizacao, 'saldo': saldo});
+        vendas.splice(indice + 1, 0, {'valor':valor, 'dataRealizacao':dataRealizacao, 'saldo': saldo});
         this.setState({'vendas': vendas});
     }
 
@@ -31,13 +31,12 @@ class Cliente extends React.Component{
         // atualizar o BD
         this.sendHTTP('POST', '/vendas/' + this.props.id, `{"valor": "${valor}", "dataRealizacao": "${dataRealizacao}", "saldo": "${saldo}"}`, () => {
             if(this.http.readyState === 4 && this.http.status === 200){
-                if( this.http.responseText !== '' ){
-                    alert(this.http.responseText);
+                if( JSON.parse(this.http.responseText).erro ){
+                    alert(JSON.parse(this.http.responseText).mensagemErro);
                     return;
                 }
-                inserirVendaOrdem(valor, dataRealizacao, saldo);
-                // atualizar saldo do cliente
-                this.sendHTTP('PUT', '/clientes/' + this.props.id, `{"saldoDevedor": ${this.props.saldo + saldo}}`, () => {});
+                this.inserirVendaOrdem(valor, dataRealizacao, saldo);
+                this.setState({'saldo': saldo});
             }
         });
     }
@@ -66,7 +65,7 @@ class Cliente extends React.Component{
                 <div onClick={this.buscarVendas} className='cliente'>
                     <span className='cliente-id'>id: {this.props.id}</span>
                     <span className='cliente-nome'>nome: {this.props.nome}</span>
-                    <span className='cliente-saldo'>saldo: {this.props.saldo}</span>
+                    <span className='cliente-saldo'>saldo: {this.state.saldo}</span>
                 </div>
                 { this.state.vendasOpen ? <Vendas nova={this.novaVenda} close={this.closeVendas} vendas={this.state.vendas}></Vendas> : ''}
             </div>

@@ -8,6 +8,7 @@ const formatoData = /^[0-9]{4}-(0[0-9]|1[0-2])-([0-2][0-9]|3[0-1])$/;
 
 const server = express();
 
+// home
 server.get('', (req, res) => {
     fs.readFile('./public/index.html', (err, data) => {
         if(err) throw err;
@@ -32,10 +33,11 @@ server.post('/clientes', (req, res) => {
     res.writeHead(200, {'conent-type': 'application/json'});
     // processar o corpo do request.
     req.on('data', (chunk) => {
-        let clienteInfo = validarJSON(chunk, res);
-        if(clienteInfo === null) return;
-
-        if(retornarErro(clienteInfo.nome === undefined, res, "atributo 'nome' está faltando")) return;
+        let clienteInfo;
+        if(retornarErro(!(clienteInfo = JSON.parse(chunk)), res, 'JSON invalido')) return;
+        if(retornarErro(!clienteInfo.nome , res, "nome - atributo faltando")) return;
+        if(retornarErro(!clienteInfo.dataNascimento , res, 'dataNascimento - atributo faltando')) return;
+        if(retornarErro(!clienteInfo.saldoDevedor , res, "saldoDevedor - atributo faltando")) return;
         if(retornarErro(!formatoData.test(clienteInfo.dataNascimento), res, 'dataNascimento - formato inválido, tente YYYY-MM-DD')) return;
         if(retornarErro(!formatoSaldo.test(clienteInfo.saldoDevedor), res, "saldoDevedor - formato inválido, exemplo de saldo válido: 'R$ 200'")) return;
         
@@ -48,11 +50,10 @@ server.put(/\/clientes\/[0-9]+/, (req, res) => {
     const clienteID = getClienteID(req.url);
 
     req.on('data', (chunk) => {
-        let clienteInfo = validarJSON(chunk, res);
-        if(clienteInfo === null) return;
-
-        retornarErro(!(clienteInfo.dataNascimento === undefined || formatoData.test(clienteInfo.dataNascimento)), res, 'dataNascimento - formato inválido, tente YYYY-MM-DD');
-        retornarErro(!(clienteInfo.saldoDevedor === undefined || formatoSaldo.test(clienteInfo.saldoDevedor)), res, "saldoDevedor - formato inválido, exemplo de saldo válido: 'R$ 200'");
+        let clienteInfo;
+        if(retornarErro(!(clienteInfo = JSON.parse(chunk)), res, 'JSON invalido')) return;
+        if(retornarErro(!(clienteInfo.dataNascimento  || formatoData.test(clienteInfo.dataNascimento)), res, 'dataNascimento - formato inválido, tente YYYY-MM-DD')) return;
+        if(retornarErro(!(clienteInfo.saldoDevedor  || formatoSaldo.test(clienteInfo.saldoDevedor)), res, "saldoDevedor - formato inválido, exemplo de saldo válido: 'R$ 200'")) return;
 
         BD.atualizarCliente(clienteID, clienteInfo.nome, clienteInfo.dataNascimento, clienteInfo.saldoDevedor);
     });
@@ -83,20 +84,23 @@ server.post(/\/vendas\/[0-9]+/, (req, res) => {
     const clienteID = getClienteID(req.url);
 
     req.on('data', (chunk) => {
-        let vendaInfo = validarJSON(chunk, res);
-        if(vendaInfo === null) return;
-
+        let vendaInfo;
+        if(retornarErro(!(vendaInfo = JSON.parse(chunk)), res, 'JSON invalido')) return;
+        if(retornarErro(!vendaInfo.valor , res, "valor - atributo faltando")) return;
+        if(retornarErro(!vendaInfo.dataRealizacao , res, 'dataRealizacao - atributo faltando')) return;
+        if(retornarErro(!vendaInfo.saldo , res, "saldo - atributo faltando")) return;
         if(retornarErro(!(formatoSaldo.test(vendaInfo.valor)), res, "valor - formato inválido, exemplo de saldo válido: 'R$ 200'")) return;
         if(retornarErro(!(formatoData.test(vendaInfo.dataRealizacao)), res, 'dataRealizacao - formato inválido, tente YYYY-MM-DD')) return;
-        if(retornarErro(!(formatoSaldo.test(vendaInfo.saldo)), res, "valor - formato inválido, exemplo de saldo válido: 'R$ 200'")) return;
+        if(retornarErro(!(formatoSaldo.test(vendaInfo.saldo)), res, "saldo - formato inválido, exemplo de saldo válido: 'R$ 200'")) return;
         
         BD.criarVenda(clienteID, vendaInfo.valor, vendaInfo.dataRealizacao, vendaInfo.saldo);    
         // TODO atualizar o saldo do cliente.
+        BD.atualizarCliente(clienteID, undefined, undefined, vendaInfo.saldo);
     })
 
     req.on('end', () => {
         res.status(200);
-        res.end();
+        res.end('{}');
     })
 });
 
@@ -132,22 +136,8 @@ function getClienteID(url){
     return parseInt(url.match(/[0-9]+$/));
 }
 
-function validarJSON(chunk, res){
-    res.setHeader('content-type', 'text/plain');
-    let jsonValido;
-    try {
-        jsonValido = JSON.parse(chunk);
-    } catch (error) {
-        res.status(200);            
-        res.end('JSON inválido');
-        return null;            
-    }
-    return jsonValido;
-}
-
 function retornarErro(guard, res, mensagemErro){
     if(guard){
-        res.writeHead(200, {'content-type': 'application/json'})
         res.end(`{"erro": true, "mensagemErro": "${mensagemErro}"}`);
         return true;
     }
