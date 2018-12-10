@@ -62,10 +62,10 @@ class Cliente extends React.Component{
     render(){
         return (
             <div>
-                <div onClick={this.buscarVendas} className='cliente'>
-                    <span className='cliente-id'>id: {this.props.id}</span>
-                    <span className='cliente-nome'>nome: {this.props.nome}</span>
-                    <span className='cliente-saldo'>saldo: {this.state.saldo}</span>
+                <div onClick={this.buscarVendas} className='cliente row'>
+                    <span className='cliente-id row-id'>{this.props.id}</span>
+                    <span className='cliente-nome row-nome'>{this.props.nome}</span>
+                    <span className='cliente-saldo row-saldo'>{this.state.saldo}</span>
                 </div>
                 { this.state.vendasOpen ? <Vendas nova={this.novaVenda} close={this.closeVendas} vendas={this.state.vendas}></Vendas> : ''}
             </div>

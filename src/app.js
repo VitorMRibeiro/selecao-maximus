@@ -43,11 +43,11 @@ class FormularioNovoCliente extends React.Component{
         return (
             <div className='cliente-formulario'>
                 <label>Nome</label>
-                <input name='nome' onChange={this.changeNome} ></input>
+                <input name='nome' onChange={this.changeNome} />
                 <label>data de nascimento</label>
-                <input name='data' onChange={this.changeData}></input>
+                <input name='data' onChange={this.changeData} />
                 <label>saldo devedor</label>
-                <input name='saldo' onChange={this.changeSaldo} ></input>
+                <input name='saldo' onChange={this.changeSaldo} />
                 <button onClick={() => this.props.novo(this.state.nome, this.state.data, this.state.saldo)}>Confirmar</button>
                 <button onClick={this.props.close}> Cancelar </button>
             </div>
@@ -98,6 +98,7 @@ class App extends React.Component{
 
     render(){
         let clientes = '';
+        let colNames = '';
         if(this.state.response){
             if(this.state.clientes.length === 0){
                 clientes = <Doge />;
@@ -106,17 +107,19 @@ class App extends React.Component{
                 clientes = this.state.clientes.map((value, index) => {
                     return <Cliente key={index} id={value.clienteID} nome={value.nome} saldo={value.saldoDevedor} ></Cliente>;
                 });
+                colNames = <div className="row col-names"><span className='row-id'>id</span><span className='row-nome'>nome</span><span className='row-saldo'>saldo devedor</span></div>;
             }
         }
         return (
             <div>
                 <div className='clientes'>
+                    { colNames }
                     { clientes }
                 </div>
                 { 
                     this.state.formularioOpen ?
                     <FormularioNovoCliente novo={this.novoCliente} close={() => this.setState({'formularioOpen':false})} /> :
-                    <button onClick={() => this.setState({'formularioOpen': true})}>Cadastrar cliente</button>
+                    <button className='btn-cadastrarCliente' onClick={() => this.setState({'formularioOpen': true})}>Cadastrar cliente</button>
                 }
             </div>
         );

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 class Venda extends React.Component{
     render(){
-        return <li>valor: {this.props.valor}, data: {this.props.dataRealizacao}</li>
+        return <div className='row'><span className='row-valor'>{this.props.valor}</span><span className='row-data'>{this.props.dataRealizacao}</span></div>
     }
 }
 
@@ -24,15 +24,19 @@ class Formulario extends React.Component{
 
     render(){
         return (
-            <div className='vendas-formulario'>
-                <label>valor da venda</label>
-                <input name='valor' onChange={this.changeValor} ></input>
-                <label>data de realização</label>
-                <input name='data' onChange={this.changeData}></input>
-                <label>saldo</label>
-                <input name='saldo' onChange={this.changeSaldo} ></input>
-                <button onClick={this.props.close}> Cancelar </button>
-                <button onClick={this.confirmar}> Confirmar </button>
+            <div>
+                <div className='vendas-formulario'>
+                    <label>valor da venda</label>
+                    <input name='valor' onChange={this.changeValor} ></input>
+                    <label>data de realização</label>
+                    <input name='data' onChange={this.changeData}></input>
+                    <label>saldo</label>
+                    <input name='saldo' onChange={this.changeSaldo} ></input>
+                </div>
+                <div className='venda-btns'>
+                    <button className='venda-btn' onClick={this.props.close}> Cancelar </button>
+                    <button className='venda-btn' onClick={this.confirmar}> Confirmar </button>
+                </div>
             </div>
         );
     }
@@ -45,26 +49,31 @@ class Vendas extends React.Component{
     }
     render(){
         let vendas = '';
+        let colNames = '';
         if(this.props.vendas.length !== 0){
             vendas = this.props.vendas.map((value, index) => {
                 return <Venda key={index} valor={value.valor} dataRealizacao={value.dataRealizacao}></Venda>
             });
+            colNames = <div className="row col-names"><span className='row-valor'>valor</span><span className='row-data'>data</span></div>;
         }
         else{
-            vendas = <p>nenhuma venda cadastrada</p>;
+            vendas = <p className='noVendas'>nenhuma venda cadastrada</p>;
         }
         return (
             <div className='modal-wrapper'>
                 <div className='modal-vendas'>
                     <div className='vendas'>
+                        {colNames}
                         {vendas}
                     </div>
                     { 
                         this.state.form ?
                         <Formulario nova={this.props.nova} closeModal={this.props.close} close={() => this.setState({'form':false})} /> :
-                        <button onClick={() => this.setState({'form': true})}>Nova venda</button>    
+                        <div className='venda-btns'>
+                            <button className='venda-btn' onClick={this.props.close} >Fechar</button>
+                            <button className='venda-btn' onClick={() => this.setState({'form': true})}>Nova venda</button>    
+                        </div>
                     }
-                    <button onClick={this.props.close} >Fechar</button>
                 </div>
             </div>
 
